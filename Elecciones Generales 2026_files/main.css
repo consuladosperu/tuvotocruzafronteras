@@ -313,10 +313,10 @@ table td {
 }
 
 /**
- * Site header
+ * Site header - menu
  */
 .site-header {
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid #AC1917;
   min-height: 55.95px;
   position: relative;
 }
