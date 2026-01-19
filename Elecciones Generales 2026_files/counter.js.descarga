@@ -1,0 +1,67 @@
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Establece la fecha y hora final (12 de abril de 2026, 7 AM)
+    const fechaFin = new Date('2026-04-12T07:00:00');
+
+    function actualizarContador() {
+        const ahora = new Date();
+
+        // Si la cuenta regresiva ha terminado...
+        if (ahora.getTime() >= fechaFin.getTime()) {
+            clearInterval(intervalo);
+            document.getElementById('countdown').innerHTML = "¡Tiempo terminado!";
+            return;
+        }
+
+        // --- Lógica para calcular meses de forma precisa ---
+        let meses = 0;
+        let anioTemp = ahora.getFullYear();
+        let mesTemp = ahora.getMonth();
+
+        while (
+            (anioTemp < fechaFin.getFullYear()) ||
+            (anioTemp === fechaFin.getFullYear() && mesTemp < fechaFin.getMonth())
+            ) {
+            // Aumentamos el contador de meses y la fecha temporal
+            meses++;
+            mesTemp++;
+            if (mesTemp > 11) {
+                mesTemp = 0;
+                anioTemp++;
+            }
+        }
+
+        // Calculamos la fecha temporal con los meses contados
+        const fechaTemp = new Date(ahora.getFullYear(), ahora.getMonth() + meses, ahora.getDate(), ahora.getHours(), ahora.getMinutes());
+
+        // Si la fecha temporal es mayor que la fecha final, ajustamos
+        if (fechaTemp.getTime() > fechaFin.getTime()) {
+            meses--;
+        }
+
+        // Calculamos la diferencia restante en milisegundos después de contar los meses
+        const fechaInicioDespuesDeMeses = new Date(ahora.getFullYear(), ahora.getMonth() + meses, ahora.getDate(), ahora.getHours(), ahora.getMinutes());
+        const diferencia = fechaFin.getTime() - fechaInicioDespuesDeMeses.getTime();
+
+        // --- Conversiones para días, horas, minutos y segundos ---
+        let dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+        let horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+
+        // Formatea los números para que tengan siempre dos cifras
+        meses = meses.toString().padStart(2, '0');
+        dias = dias.toString().padStart(2, '0');
+        horas = horas.toString().padStart(2, '0');
+        minutos = minutos.toString().padStart(2, '0');
+
+        document.getElementById('months').innerHTML = meses;
+        document.getElementById('days').innerHTML = dias;
+        document.getElementById('hours').innerHTML = horas;
+        document.getElementById('minutes').innerHTML = minutos;
+    }
+
+    actualizarContador();
+
+    // Actualiza el contador cada segundo
+    const intervalo = setInterval(actualizarContador, 1000);
+})

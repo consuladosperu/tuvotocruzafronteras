@@ -1,0 +1,33 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Manejo de las pestañas principales (anios: 2025, 2026)
+    const videoTabs = document.querySelectorAll('.sidebar .tab-button');
+    const videoPanels = document.querySelectorAll('.tab-button-panel');
+
+    videoTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetPanelId = tab.id.replace('tab-button-', 'tab-button-panel-');
+            videoPanels.forEach(panel => {
+                panel.style.display = 'none';
+                panel.setAttribute('tabindex', '-1');
+            });
+            videoTabs.forEach(t => {
+                t.setAttribute('aria-selected', 'false');
+                t.setAttribute('tabindex', '-1');
+            });
+
+            // Muestra el panel del año seleccionado y selecciona la pestaña correspondiente
+            const targetPanel = document.getElementById(targetPanelId);
+            if (targetPanel) {
+                targetPanel.style.display = 'block';
+                targetPanel.setAttribute('tabindex', '0');
+            }
+            tab.setAttribute('aria-selected', 'true');
+            tab.setAttribute('tabindex', '0');
+        });
+    });
+
+    if (videoTabs.length > 0) {
+        videoTabs[0].click();
+    }
+
+});
